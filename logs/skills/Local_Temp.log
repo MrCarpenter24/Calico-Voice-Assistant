@@ -1,0 +1,9 @@
+2025-06-30 12:18:35,907 - skill.Local_Temp - INFO - Handling intent for session: default-porcupine_linux-7820fe07-dd0e-41a9-b8a5-ca894b7be74b, site: default
+2025-06-30 12:18:37,355 - skill.Local_Temp - INFO - Speaking final response: 'It's currently 85.1 degrees Fahrenheit in Morgantown, West Virginia.'
+2025-06-30 12:18:37,356 - skill.Local_Temp - INFO - Publishing to MQTT topic: hermes/tts/say
+2025-06-30 12:18:37,356 - skill.Local_Temp - INFO - Payload: {"text": "It's currently 85.1 degrees Fahrenheit in Morgantown, West Virginia.", "siteId": "default"}
+2025-06-30 12:18:37,356 - skill.Local_Temp - INFO - Ending session default-porcupine_linux-7820fe07-dd0e-41a9-b8a5-ca894b7be74b
+2025-06-30 12:18:37,357 - skill.Local_Temp - INFO - Publishing to MQTT topic: hermes/dialogueManager/endSession
+2025-06-30 12:18:37,357 - skill.Local_Temp - INFO - Payload: {"sessionId": "default-porcupine_linux-7820fe07-dd0e-41a9-b8a5-ca894b7be74b", "text": ""}
+2025-06-30 12:18:37,357 - skill.Local_Temp - INFO - Session data cleared.
+2025-06-30 12:18:37,357 - skill.Local_Temp - INFO - Successfully provided local temperature to the user.

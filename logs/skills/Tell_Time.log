@@ -1,0 +1,9 @@
+2025-06-30 12:29:46,546 - skill.Tell_Time - INFO - Handling intent for session: default-porcupine_linux-dbaa4087-37fa-418f-a32f-e4703cc20d32, site: default
+2025-06-30 12:29:46,546 - skill.Tell_Time - INFO - Speaking final response: 'It is currently 12:29 29, pee em.'
+2025-06-30 12:29:46,546 - skill.Tell_Time - INFO - Publishing to MQTT topic: hermes/tts/say
+2025-06-30 12:29:46,547 - skill.Tell_Time - INFO - Payload: {"text": "It is currently 12:29 29, pee em.", "siteId": "default"}
+2025-06-30 12:29:46,547 - skill.Tell_Time - INFO - Ending session default-porcupine_linux-dbaa4087-37fa-418f-a32f-e4703cc20d32
+2025-06-30 12:29:46,547 - skill.Tell_Time - INFO - Publishing to MQTT topic: hermes/dialogueManager/endSession
+2025-06-30 12:29:46,547 - skill.Tell_Time - INFO - Payload: {"sessionId": "default-porcupine_linux-dbaa4087-37fa-418f-a32f-e4703cc20d32", "text": ""}
+2025-06-30 12:29:46,547 - skill.Tell_Time - INFO - Session data cleared.
+2025-06-30 12:29:46,547 - skill.Tell_Time - INFO - Successfully spoke the current time to the user.

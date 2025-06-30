@@ -1,0 +1,26 @@
+{
+    "dialogue": {
+        "system": "rhasspy"
+    },
+    "intent": {
+        "system": "fsticuffs"
+    },
+    "microphone": {
+        "system": "pyaudio"
+    },
+    "mqtt": {
+        "enabled": "true"
+    },
+    "sounds": {
+        "system": "aplay"
+    },
+    "speech_to_text": {
+        "system": "vosk"
+    },
+    "text_to_speech": {
+        "system": "nanotts"
+    },
+    "wake": {
+        "system": "porcupine"
+    }
+}
