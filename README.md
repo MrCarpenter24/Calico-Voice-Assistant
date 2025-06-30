@@ -42,15 +42,17 @@ To get a local copy up and running, follow these simple steps.
 
    *(You* will need to create a requirements.txt file containing paho-mqtt and *requests)*  
 3. **Configure Rhasspy:** The sentences.ini and profile.json files included in this project are crucial for proper setup.  
-   * Navigate to your Rhasspy profile directory (usually \~/.config/rhasspy/profiles/en/).  
+   * Navigate to your Rhasspy profile directory (usually \~/.config/rhasspy/profiles/en/).
    * **Back up your existing sentences.ini and profile.json\!**  
    * Replace them with the versions from this project's /rhasspy\_config directory.  
    * Train your Rhasspy profile and restart it.  
-4. **Configure Calico:**  
-   * Navigate to the Calico/settings directory.  
-   * Rename config.example.json to config.json.  
+4. **Configure Calico:**
+   * Calico currently runs out of the Documents directoy (gross, I know).   
+   * Configure it how you like. The variables that need changed at at the top of   
+   * these files: Calico-Start.sh, Calico-Stop.sh, and calico_skill_service.py.   
+   * Navigate to the Calico/settings directory.   
    * Edit config.json to add your personal details, such as zip code and region for the weather skill.  
-5. **Launch the Calico Skill Service:** Open a terminal, navigate to the project's root directory, and run the service:  
+6. **Launch the Calico Skill Service:** Open a terminal, navigate to the project's root directory, and run the service:  
    python3 services/calico\_skill\_service.py
 
    The service will connect to the MQTT broker and begin listening for intents from Rhasspy.
