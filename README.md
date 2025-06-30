@@ -41,7 +41,7 @@ To get a local copy up and running, follow these simple steps.
    pip install \-r requirements.txt
 
    *(You* will need to create a requirements.txt file containing paho-mqtt and *requests)*  
-3. **Configure Rhasspy:** The sentences.ini and profile.json files included in this project are crucial for proper setup.  
+3. **Configure Rhasspy:** The sentences.ini and profile.json files included in this project are highly recommended for proper setup.  
    * Navigate to your Rhasspy profile directory (usually \~/.config/rhasspy/profiles/en/).
    * **Back up your existing sentences.ini and profile.json\!**  
    * Replace them with the versions from this project's /rhasspy\_config directory.  
