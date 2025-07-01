@@ -101,6 +101,7 @@ Creating a new skill is straightforward.
 
 ### **Example: One-Shot Skill**
 
+'''python
 \# skills/Hello\_World.py  
 from pathlib import Path
 
@@ -121,6 +122,7 @@ class HelloWorldSkill(BaseSkill):
     def handle_intent(self, message: dict):  
         super().handle_intent(message) # Sets up session info  
         self.speak("Hello there! The world says hello back.")
+'''
 
 ## **Troubleshooting**
 
