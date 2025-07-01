@@ -62,7 +62,7 @@ pip install -r requirements.txt
    * Starts up Calico's core service, calico_skill_service.py.  
    * The service will connect to the MQTT broker and begin listening for intents from Rhasspy.  
 ```bash
-Calico-Start.sh.
+./Calico-Start.sh
 ```
 6. **Stopping Calico** Should anything go wrong, simply run the stop script to shut everything down cleanly.  
 ```bash
