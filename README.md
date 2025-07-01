@@ -118,9 +118,9 @@ class HelloWorldSkill(BaseSkill):
             mqtt\_client=mqtt\_client  
         )
 
-    def handle\_intent(self, message: dict):  
-        super().handle\_intent(message) \# Sets up session info  
-        self.speak("Hello there\! The world says hello back.")
+    def handle_intent(self, message: dict):  
+        super().handle_intent(message) # Sets up session info  
+        self.speak("Hello there! The world says hello back.")
 
 ## **Troubleshooting**
 
