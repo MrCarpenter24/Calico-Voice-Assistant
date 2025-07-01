@@ -60,11 +60,11 @@ To get a local copy up and running, follow these simple steps.
    * Install and start up Mosquitto.  
    * Install the Tkinter Python library for the settings GUI.  
    * Starts up Calico's core service, calico_skill_service.py.  
-   Should anything go wrong, simply run the stop script from the same directory:  
+   * The service will connect to the MQTT broker and begin listening for intents from Rhasspy.  
+6. **Stopping Calico** Should anything go wrong, simply run the stop script from the same directory:  
    ./Calico-Stop.sh  
-   This will shut everything down cleanly.  
-
-   The service will connect to the MQTT broker and begin listening for intents from Rhasspy.  
+   * This will shut everything down cleanly.  
+7. **That's It!** Everything *should* be good to go! Just remeber, Calico is in very early stages of development. There's a lot more to come!
 
 ## **Project Structure**
 
