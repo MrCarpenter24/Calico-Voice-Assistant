@@ -52,21 +52,17 @@ To get a local copy up and running, follow these simple steps.
    * Make sure these files are marked as executable - VERY IMPORTANT.
    * Navigate to the Calico/settings directory.   
    * Edit config.json to add your personal details, such as zip code and region for the weather skill.  
-6. **Launch Calico:** Open a terminal, navigate to the project's root directory, and run the start script:  
-
-./Calico-Start.sh
-
-   * This will:
-      * Start up Docker
-      * Install and launch the latest version of the Docker Rhasspy Container
-      * Install and start up Mosquitto
-      * Install the Tkinter Python library for the settings GUI
-      * Starts up Calico's core service, calico_skill_service.py.
-   * Should anything go wrong, simply run the stop script from the same directory: 
-
-./Calico-Stop.sh
-
-   * This will shut everything down cleanly.
+5. **Launch Calico:** Open a terminal, navigate to the project's root directory, and run the start script:  
+   ./Calico-Start.sh
+   This will:
+   * Start up Docker
+   * Install and launch the latest version of the Docker Rhasspy Container
+   * Install and start up Mosquitto
+   * Install the Tkinter Python library for the settings GUI
+   * Starts up Calico's core service, calico_skill_service.py.
+   Should anything go wrong, simply run the stop script from the same directory: 
+   ./Calico-Stop.sh
+   This will shut everything down cleanly.
 
    The service will connect to the MQTT broker and begin listening for intents from Rhasspy.
 
