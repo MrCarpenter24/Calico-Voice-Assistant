@@ -33,15 +33,15 @@ To get a local copy up and running, follow these simple steps.
 
 1. **Clone the repository:**  
 ```bash
-git clone \<YOUR\_REPOSITORY\_URL\>  
+git clone <YOUR_REPOSITORY_URL>  
 cd Calico
 ```
 2. **Set up the Python Environment:** It is highly recommended to use a virtual environment.  
    *(You* will need to create a requirements.txt file containing paho-mqtt and *requests)*  
 ```bash
-python3 \-m venv .venv  
+python3 -m venv .venv  
 source .venv/bin/activate  
-pip install \-r requirements.txt
+pip install -r requirements.txt
 ```
 3. **Configure Rhasspy:** The sentences.ini and profile.json files included in this project are highly recommended for proper setup.  
    * Navigate to your Rhasspy profile directory (usually \~/.config/rhasspy/profiles/en/).
