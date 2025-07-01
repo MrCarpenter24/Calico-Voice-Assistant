@@ -32,15 +32,17 @@ To get a local copy up and running, follow these simple steps.
 ### **Installation**
 
 1. **Clone the repository:**  
-   git clone \<YOUR\_REPOSITORY\_URL\>  
-   cd Calico
-
+```bash
+git clone \<YOUR\_REPOSITORY\_URL\>  
+cd Calico
+```
 2. **Set up the Python Environment:** It is highly recommended to use a virtual environment.  
-   python3 \-m venv .venv  
-   source .venv/bin/activate  
-   pip install \-r requirements.txt
-
    *(You* will need to create a requirements.txt file containing paho-mqtt and *requests)*  
+```bash
+python3 \-m venv .venv  
+source .venv/bin/activate  
+pip install \-r requirements.txt
+```
 3. **Configure Rhasspy:** The sentences.ini and profile.json files included in this project are highly recommended for proper setup.  
    * Navigate to your Rhasspy profile directory (usually \~/.config/rhasspy/profiles/en/).
    * **Back up your existing sentences.ini and profile.json\!**  
@@ -52,22 +54,20 @@ To get a local copy up and running, follow these simple steps.
    * Make sure these files are marked as executable - VERY IMPORTANT.
    * Navigate to the Calico/settings directory.   
    * Edit config.json to add your personal details, such as zip code and region for the weather skill.  
-5. **Launch Calico:** Open a terminal, navigate to the project's root directory, and run the start script:
-```bash
-Calico-Start.sh.
-```
-This will:  
+5. **Launch Calico:** Open a terminal, navigate to the project's root directory, and run the start script. This will:  
    * Start up Docker CLI.  
    * Install and launch the latest version of the Docker Rhasspy container.  
    * Install and start up Mosquitto.  
    * Install the Tkinter Python library for the settings GUI.  
    * Starts up Calico's core service, calico_skill_service.py.  
    * The service will connect to the MQTT broker and begin listening for intents from Rhasspy.  
-6. **Stopping Calico** Should anything go wrong, simply run the stop script:
+```bash
+Calico-Start.sh.
+```
+6. **Stopping Calico** Should anything go wrong, simply run the stop script to shut everything down cleanly.  
 ```bash
 ./Calico-Stop.sh  
 ```
-   * This will shut everything down cleanly.  
 7. **That's It!** Everything *should* be good to go! Just remeber, Calico is in very early stages of development. There's a lot more to come!
 
 ## **Project Structure**
