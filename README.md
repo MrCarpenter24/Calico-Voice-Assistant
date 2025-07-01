@@ -48,7 +48,7 @@ To get a local copy up and running, follow these simple steps.
    * Train your Rhasspy profile and restart it.  
 4. **Configure Calico:**
    * Calico currently runs out of the Documents directoy (gross, I know).   
-   * Configure it how you like. The variables that need changed at at the top of   
+   * Configure it how you like. The variables that need changed are at the top of   
    * these files: Calico-Start.sh, Calico-Stop.sh, and calico_skill_service.py.   
    * Navigate to the Calico/settings directory.   
    * Edit config.json to add your personal details, such as zip code and region for the weather skill.  
