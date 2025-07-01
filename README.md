@@ -52,14 +52,21 @@ To get a local copy up and running, follow these simple steps.
    * Make sure these files are marked as executable - VERY IMPORTANT.
    * Navigate to the Calico/settings directory.   
    * Edit config.json to add your personal details, such as zip code and region for the weather skill.  
-5. **Launch Calico:** Open a terminal, navigate to the project's root directory, and run the start script: Calico-Start.sh. This will:  
+5. **Launch Calico:** Open a terminal, navigate to the project's root directory, and run the start script:
+```bash
+Calico-Start.sh.
+```
+This will:  
    * Start up Docker CLI.  
    * Install and launch the latest version of the Docker Rhasspy container.  
    * Install and start up Mosquitto.  
    * Install the Tkinter Python library for the settings GUI.  
    * Starts up Calico's core service, calico_skill_service.py.  
    * The service will connect to the MQTT broker and begin listening for intents from Rhasspy.  
-6. **Stopping Calico** Should anything go wrong, simply run the stop script: Calico-Stop.sh.  
+6. **Stopping Calico** Should anything go wrong, simply run the stop script:
+```bash
+./Calico-Stop.sh  
+```
    * This will shut everything down cleanly.  
 7. **That's It!** Everything *should* be good to go! Just remeber, Calico is in very early stages of development. There's a lot more to come!
 
@@ -101,28 +108,30 @@ Creating a new skill is straightforward.
 
 ### **Example: One-Shot Skill**
 
-'''python
-\# skills/Hello\_World.py  
+```python
+# skills/Hello_World.py  
 from pathlib import Path
 
-\# Add the project's root directory (Calico) to the Python path
-\# This allows us to import from the 'libraries' module
-sys.path.append(str(Path(\_\_file\_\_).resolve().parents[1]))
+# Add the project's root directory (Calico) to the Python path
+# This allows us to import from the 'libraries' module
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from libraries.base\_skill import BaseSkill
+from libraries.base_skill import BaseSkill
 
 class HelloWorldSkill(BaseSkill):  
-    def \_\_init\_\_(self, mqtt\_client):  
-        super().\_\_init\_\_(  
-            intent\_name="Hello\_World",  
-            answer\_intent="",  \# No follow-up question  
-            mqtt\_client=mqtt\_client  
+    def __init__(self, mqtt_client):  
+        super().__init__(  
+            intent_name="Hello_World",  
+            # No follow-up question, otherwise "Answer_<name>"
+            # is the amswer intent naming scheme.
+            answer_intent="",  
+            mqtt_client=mqtt_client  
         )
 
     def handle_intent(self, message: dict):  
         super().handle_intent(message) # Sets up session info  
         self.speak("Hello there! The world says hello back.")
-'''
+```
 
 ## **Troubleshooting**
 
