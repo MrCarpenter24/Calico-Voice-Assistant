@@ -75,9 +75,9 @@ def setup_logging():
     root_logger.addHandler(file_handler)
 
     # Create a handler to write to the console (stdout)
-    stream_handler = logging.StreamHandler(sys.stdout)
-    stream_handler.setFormatter(formatter)
-    root_logger.addHandler(stream_handler)
+    # stream_handler = logging.StreamHandler(sys.stdout)
+    # stream_handler.setFormatter(formatter)
+    # root_logger.addHandler(stream_handler)
     
     logging.info("Logging configured.")
 
