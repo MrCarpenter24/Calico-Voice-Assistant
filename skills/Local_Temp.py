@@ -1,11 +1,15 @@
 # Calico/skills/Local_Temp.py
 """
-Simple skill to pull local temperature using ipinfo.io service
+Simple skill to pull local temperature using Zippopotam API
 and Open-Meteo API.
+
+https://open-meteo.com/
+https://zippopotam.us/
+
 """
 
 # We need to adjust the path to import from the parent directory's 'libraries' folder
-import sys, requests, json, os
+import sys, requests
 from pathlib import Path
 
 # Add the project's root directory (Calico) to the Python path
@@ -29,26 +33,16 @@ class LocalTempSkill(BaseSkill):
             mqtt_client=mqtt_client
         )
 
-    def load_and_validate_config(self):
+    def _load_and_validate_config(self):
         """
         Loads settings from config.json, validates required fields, 
         and returns them.
         """
-        # Construct the absolute path to config.json
-        # Assumes this script is in a 'scripts' folder, and 'settings' is a sibling folder.
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        config_path = os.path.join(script_dir, '..', 'settings', 'config.json')
-
-        if not os.path.exists(config_path):
-            raise FileNotFoundError("Configuration file (config.json) not found.")
-
-        with open(config_path, 'r') as f:
-            config = json.load(f)
 
         # Validate that required settings exist and are not empty
-        zip_code = config.get("zip_code")
-        region = config.get("region")
-        temp_unit = config.get("temp_unit")
+        zip_code = self.get_config("zip_code")
+        region = self.get_config("region")
+        temp_unit = self.get_config("temp_unit")
 
         if not zip_code:
             raise ValueError("Zip code is not set in the configuration file.")
@@ -59,7 +53,7 @@ class LocalTempSkill(BaseSkill):
             
         return zip_code, region, temp_unit
 
-    def zip_to_latlon(self, zip_code: str, country: str = "us"):
+    def _zip_to_latlon(self, zip_code: str, country: str = "us"):
         """Return (lat, lon, city, state) for a postal code using Zippopotam.us."""
         url = f"http://api.zippopotam.us/{country}/{zip_code}"
         resp = requests.get(url, timeout=5)
@@ -74,7 +68,7 @@ class LocalTempSkill(BaseSkill):
             place["state"]
         )
 
-    def get_temperature(self, lat: float, lon: float):
+    def _get_temperature(self, lat: float, lon: float):
         """Return current temperature in °C from Open-Meteo."""
         url = (
             "https://api.open-meteo.com/v1/forecast"
@@ -92,11 +86,11 @@ class LocalTempSkill(BaseSkill):
 
         try:
             # Load settings from config file first
-            ZIP_CODE, COUNTRY, TEMP_UNIT = self.load_and_validate_config()
+            ZIP_CODE, COUNTRY, TEMP_UNIT = self._load_and_validate_config()
 
             # Use loaded settings to get weather data
-            lat, lon, city, state = self.zip_to_latlon(ZIP_CODE, COUNTRY)
-            temp_c = self.get_temperature(lat, lon)
+            lat, lon, city, state = self._zip_to_latlon(ZIP_CODE, COUNTRY)
+            temp_c = self._get_temperature(lat, lon)
             
             place = f"{city}, {state}" if city and state else "your area"
 

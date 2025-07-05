@@ -7,6 +7,7 @@ state, logging, and a retry mechanism for conversations.
 
 import json
 import logging
+import os
 import random
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -48,6 +49,9 @@ class BaseSkill(ABC):
         self.site_id = None
         self.retries = 0
 
+        # Define path to config file for use in helper function
+        self.config_path = Path.home() / "Documents" / "Calico" / "settings" / "config.json"
+
         # --- Set up dedicated logger for the skill ---
         log_dir = Path.home() / "Documents" / "Calico" / "logs" / "skills"
         log_dir.mkdir(parents=True, exist_ok=True)
@@ -75,6 +79,34 @@ class BaseSkill(ABC):
             )
             fh.setFormatter(formatter)
             self.log.addHandler(fh)
+
+    def get_config(self, key: str, default=None):
+        """
+        Loads a value from the central config.json file.
+
+        Args:
+            key (str): The specific key to retrieve from the config file.
+            default: The value to return if the key is not found.
+
+        Returns:
+            The value from the config file, or the default value.
+        """
+        try:
+            if not self.config_path.exists():
+                self.log.warning("Configuration file (config.json) not found.")
+                return default
+            
+            with open(self.config_path, 'r') as f:
+                config = json.load(f)
+            
+            return config.get(key, default)
+
+        except json.JSONDecodeError:
+            self.log.error("Could not decode config.json. Please check for syntax errors.")
+            return default
+        except Exception as e:
+            self.log.error(f"An unexpected error occurred while reading config: {e}")
+            return default
 
     def _publish(self, topic: str, payload: dict):
         """Private helper to publish a JSON payload to an MQTT topic."""

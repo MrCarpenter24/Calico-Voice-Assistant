@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 
+"""
+Simple setttings application for Calico.
+Uses https://zippopotam.us/ to verify zip codes.
+"""
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 import json
 import requests
 import os
+import webbrowser
 
 class SettingsEditor(tk.Tk):
     """
@@ -13,7 +19,7 @@ class SettingsEditor(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Calico Voice Assistant")
-        self.geometry("400x300")
+        self.geometry("450x425")
         self.resizable(False, False)
 
         # --- Define the absolute path for the config file ---
@@ -25,8 +31,10 @@ class SettingsEditor(tk.Tk):
         # --- Style Configuration ---
         BG_COLOR = "#80CF59"
         TEXT_COLOR = "white"
-        BOLD_FONT = ("Helvetica", 14, "bold")
+        BOLD_FONT = ("Helvetica", 12, "bold")
+        NORMAL_FONT = ("Helvetica", 10)
         HEADER_FONT = ("Helvetica", 18, "bold")
+        LINK_FONT = ("Helvetica", 10, "underline")
 
         # Create and configure the style
         style = ttk.Style(self)
@@ -45,6 +53,11 @@ class SettingsEditor(tk.Tk):
         # Configure Combobox style (entry part)
         style.configure('TCombobox', fieldbackground='white', background='#6abf40', font=("Helvetica", 10))
         # Note: The dropdown list style is often controlled by the OS and may not change.
+            # Style for the new "About" frame
+        style.configure('About.TLabelframe', background=BG_COLOR, bordercolor=TEXT_COLOR)
+        style.configure('About.TLabelframe.Label', background=BG_COLOR, foreground=TEXT_COLOR, font=BOLD_FONT)
+        # Style for the new hyperlink labels
+        style.configure('Link.TLabel', background=BG_COLOR, foreground=TEXT_COLOR, font=LINK_FONT)
 
         # Create the main frame.
         main_frame = ttk.Frame(self, padding="20")
@@ -52,7 +65,7 @@ class SettingsEditor(tk.Tk):
 
         # --- Header ---
         # The header label needs direct configuration to override the default style font size.
-        header_label = ttk.Label(main_frame, text="Settings", font=HEADER_FONT, background=BG_COLOR, foreground=TEXT_COLOR)
+        header_label = ttk.Label(main_frame, text="Calico Settings", font=HEADER_FONT, background=BG_COLOR, foreground=TEXT_COLOR)
         header_label.pack(pady=(0, 20))
 
         # --- Form Fields ---
@@ -93,6 +106,39 @@ class SettingsEditor(tk.Tk):
         # The save button now handles validation.
         save_button = ttk.Button(button_frame, text="Save", command=self.save_settings)
         save_button.pack(fill=tk.X)
+
+        # --- About Section ---
+        about_frame = ttk.Labelframe(main_frame, text="About", padding="10", style='About.TLabelframe')
+        about_frame.pack(fill=tk.X, pady=(20, 10))
+
+        # Helper function to create a composite label with a hyperlink
+        def create_composite_link(parent, static_text, link_text, url):
+            # Create a frame to hold the two labels side-by-side
+            line_frame = ttk.Frame(parent)
+            
+            # Static text part
+            static_label = ttk.Label(line_frame, text=static_text, font=NORMAL_FONT)
+            static_label.pack(side=tk.LEFT)
+
+            # Clickable link part
+            link_label = ttk.Label(line_frame, text=link_text, style="Link.TLabel", cursor="hand2")
+            link_label.bind("<Button-1>", lambda e: webbrowser.open_new(url))
+            link_label.pack(side=tk.LEFT)
+            
+            return line_frame
+        
+        # Static info labels
+        ttk.Label(about_frame, text="Calico v0.4.2 pre-alpha", font=NORMAL_FONT).pack(anchor=tk.W)
+        ttk.Label(about_frame, text="MIT License", font=NORMAL_FONT).pack(anchor=tk.W)
+        
+        # Separator for visual clarity
+        ttk.Separator(about_frame, orient='horizontal').pack(fill='x', pady=5)
+
+        # Link labels using the new composite function
+        create_composite_link(about_frame, "Weather Data Provided by ", "Open-Meteo.com", "https://open-meteo.com/").pack(anchor=tk.W)
+        create_composite_link(about_frame, "Zip Code Data Provided by ", "Zippopotam.us", "https://zippopotam.us/").pack(anchor=tk.W)
+        create_composite_link(about_frame, "View on ", "GitHub", "https://github.com/MrCarpenter24/Calico-Voice-Assistant/tree/main").pack(anchor=tk.W)
+        create_composite_link(about_frame, "Built to work with ", "Rhasspy 2.5", "https://rhasspy.readthedocs.io/en/latest/").pack(anchor=tk.W)
 
         # Load initial settings
         self.load_settings()
