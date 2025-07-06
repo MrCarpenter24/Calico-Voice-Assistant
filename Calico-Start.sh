@@ -81,8 +81,28 @@ function ensure_tkinter_installed() {
   fi
 }
 
+function ensure_paho-mqtt_installed() {
+  # Check if paho-mqtt is available to Python 3
+  if python3 -c "import paho.mqtt.client" &> /dev/null; then
+    echo "[INFO] paho-mqtt is already installed."
+  else
+    echo "[WARNING] paho-mqtt not found. Attempting to install..."
+    # --- Installation for Debian/Ubuntu ---
+    sudo apt-get update && sudo apt-get install -y python3-paho-mqtt
+
+    # Verify installation
+    if python3 -c "import paho.mqtt.client" &> /dev/null; then
+      echo "[OK] paho-mqtt has been successfully installed."
+    else
+      echo "[ERROR] Failed to install paho-mqtt. Please install it manually for your system."
+      pauseForExit 1 # Return a non-zero exit code to indicate failure
+    fi
+  fi
+}
+
 # ── Verify Dependencies ────────────────────────────────────
 ensure_tkinter_installed
+ensure_paho-mqtt_installed
 ensure_docker_running
 ensure_mosquitto_running
 
