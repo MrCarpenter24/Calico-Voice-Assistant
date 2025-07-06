@@ -25,9 +25,9 @@ To get a local copy up and running, follow these simple steps.
 ### **Prerequisites**
 
 * **Python 3.8+**  
-* **Docker** and **Docker Compose**  
+* **Docker Compose**  
 * **Git** for version control  
-* An operational **Rhasspy 2.5.11** instance (the Docker installation is recommended).
+* An operational **Rhasspy 2.5.11** container.
 
 ### **Installation**
 
@@ -43,9 +43,9 @@ python3 -m venv .venv
 source .venv/bin/activate  
 pip install -r requirements.txt
 ```
-3. **Configure Rhasspy:** The sentences.ini and profile.json files included in this project are highly recommended for proper setup.  
+3. **Configure Rhasspy:** The sentences.ini and profile.json files as well as the slots folder included in this project are highly recommended for proper setup.  
    * Navigate to your Rhasspy profile directory (usually \~/.config/rhasspy/profiles/en/).
-   * **Back up your existing sentences.ini and profile.json\!**  
+   * **Back up your existing sentences.ini, profile.json and slots folder\!**  
    * Replace them with the versions from this project's /rhasspy\_config directory.  
    * Train your Rhasspy profile and restart it.  
 4. **Configure Calico:**
