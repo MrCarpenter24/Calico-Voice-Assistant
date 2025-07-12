@@ -58,4 +58,4 @@ class AskMeColorsSkill(BaseSkill):
             # Reset state for the next time the skill is triggered
             self.log.info("Conversation finished. Resetting state.")
             self.conversation_state = "initial"
-            # The self.speak() method automatically calls self.end_session()
+            # The self.speak() method calls self.end_session() by default

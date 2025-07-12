@@ -33,7 +33,7 @@ sys.path.append(str(BASE_DIR))
 MQTT_HOST = os.getenv("MQTT_HOST", "localhost")
 MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
 LOG_FILE = LOG_DIR / "calico_skill_service.log"
-LOG_MAX_LINES = 500
+LOG_MAX_LINES = 2500
 
 # This global dictionary will store all loaded skill instances
 LOADED_SKILLS = {}

@@ -18,6 +18,10 @@
         "system": "vosk"
     },
     "text_to_speech": {
+        "larynx": {
+            "default_voice": "southern_english_female",
+            "vocoder": "vctk_medium"
+        },
         "system": "nanotts"
     },
     "wake": {

@@ -7,14 +7,13 @@ state, logging, and a retry mechanism for conversations.
 
 import json
 import logging
-import os
 import random
 from abc import ABC, abstractmethod
 from pathlib import Path
 
 # --- Constants ---
-LOG_MAX_LINES = 200
-MAX_RETRIES = 5
+LOG_MAX_LINES = 500
+MAX_RETRIES = 3
 RETRY_MESSAGES = [
     "I'm sorry, I didn't catch that. Could you say it again?",
     "I didn't quite get that. Please repeat yourself.",
@@ -117,19 +116,18 @@ class BaseSkill(ABC):
         except Exception as e:
             self.log.error(f"Failed to publish to MQTT topic {topic}: {e}", exc_info=True)
 
-    def speak(self, text: str):
+    def speak(self, text: str, end_the_session: bool = True):
         """
-        Speaks a final sentence and immediately ends the session.
-        This is for one-shot commands or the final turn of a conversation.
+        Speaks a sentence. By default, it also ends the conversation.
         """
         if not self.site_id:
             self.log.error("Cannot use speak() without a valid site_id.")
             return
 
-        self.log.info(f"Speaking final response: '{text}'")
+        self.log.info(f"Speaking response: '{text}'")
         self._publish("hermes/tts/say",{"text": text, "siteId": self.site_id})
 
-        if self.session_id:
+        if end_the_session and self.session_id:
             self.end_session()
 
     def end_session(self, text: str = ""):
@@ -153,16 +151,12 @@ class BaseSkill(ABC):
             return
 
         self.log.info(f"Continuing session {self.session_id}, asking: '{text_to_speak}'")
-        
-        # *** THIS IS THE FIX ***
-        # The presence of `customData` tells the dialogue manager to keep listening
-        # for a reply after the TTS has finished speaking.
 
         self._publish("hermes/dialogueManager/continueSession", {
             "sessionId": self.session_id,
             "text": text_to_speak,
             "intentFilter": [self.answer_intent],
-            "customData": json.dumps({"origin": self.intent_name}), # Add customData to the payload
+            #"customData": json.dumps({"origin": self.intent_name}), # Add customData to the payload
             "sendIntentNotRecognized": True, # Critical for retry logic
         })
 
