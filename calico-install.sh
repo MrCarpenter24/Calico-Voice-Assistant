@@ -7,7 +7,7 @@
 # It follows standard Linux directory practices and creates a desktop entry.
 #
 
-set -euo pipefail
+set -euo pipefail #Error output n' stuffs
 
 # Function to prompt user to exit program
 function pauseForExit() {
@@ -50,7 +50,7 @@ cat << 'EOL'
   `--'   `--'
 EOL
 
-print_header "Welcome to the Calico Voice Assistant Installer!"
+print_header "Welcome to Calico v0.5.0 pre-alpha!"
 echo "This script will install Calico and all required dependencies into:"
 echo "Application files: $APP_DIR"
 echo "Configuration:     $CONFIG_DIR"
