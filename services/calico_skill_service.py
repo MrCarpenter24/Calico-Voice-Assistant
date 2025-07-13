@@ -21,14 +21,14 @@ except ImportError:
     print("FATAL: paho-mqtt is required. Please run 'pip install paho-mqtt'.")
     sys.exit(1)
 
-# --- Paths & Configuration ---
-BASE_DIR = Path.home() / "Documents" / "Calico"
-SKILLS_DIR = BASE_DIR / "skills"
-LIBRARIES_DIR = BASE_DIR / "libraries"
-LOG_DIR = BASE_DIR / "logs"
+# --- Paths & Configuration (Updated to standard directories) ---
+APP_DIR = Path.home() / ".local" / "share" / "calico"
+CONFIG_DIR = Path.home() / ".config" / "calico"
+SKILLS_DIR = APP_DIR / "skills"
+LOG_DIR = APP_DIR / "logs"
 
 # Add the project root to the Python path to allow imports from `libraries`
-sys.path.append(str(BASE_DIR))
+sys.path.append(str(APP_DIR))
 
 MQTT_HOST = os.getenv("MQTT_HOST", "localhost")
 MQTT_PORT = int(os.getenv("MQTT_PORT", 1883))
