@@ -28,7 +28,22 @@ print_header() {
 }
 
 # --- Main Script ---
-print_header "Welcome to the Calico Voice Assistant Installer"
+# --- THIS IS THE FIX: Use a 'here document' to print the literal text ---
+cat << 'EOL'
+  ,-.       _,---._ __  / \
+ /  )    .-'       `./ /   \
+(  (   ,'            `/    /|
+ \  `-"             \'\   / |
+  `.              ,  \ \ /  |
+   /`.          ,'-`----Y   |
+  (            ;        |   '
+  |  ,-.    ,-'         |  /
+  |  | (   |        hjw | /
+  )  |  \  `.___________|/
+  `--'   `--'
+EOL
+
+print_header "Welcome to the Calico Voice Assistant Installer!"
 echo "This script will install Calico and all required dependencies into:"
 echo "Application files: $APP_DIR"
 echo "Configuration:     $CONFIG_DIR"
@@ -43,7 +58,6 @@ sudo -v
 # --- Step 1: System Dependencies ---
 print_header "Step 1: Installing System Dependencies"
 
-# --- THIS IS THE FIX ---
 # This sequence is designed to be highly robust against package manager issues.
 # 1. Clean the local cache of downloaded package files.
 echo ">>> Cleaning apt cache..."
@@ -137,15 +151,22 @@ else
     cp "$APP_DIR/settings/config.default.json" "$CONFIG_DIR/config.json"
 fi
 
-# --- Step 4: Rhasspy Setup ---
-print_header "Step 4: Setting up Rhasspy"
+# --- Step 4: Set File Permissions ---
+print_header "Step 4: Setting File Permissions"
+echo ">>> Making launcher and services executable..."
+chmod +x "$APP_DIR/launcher.py"
+chmod +x "$APP_DIR/services/calico_skill_service.py"
+echo ">>> Permissions set."
+
+# --- Step 5: Rhasspy Setup ---
+print_header "Step 5: Setting up Rhasspy"
 echo ">>> Pulling the Rhasspy Docker image ($RHASSPY_IMAGE)..."
 echo "This may take a few minutes."
 sudo docker pull "$RHASSPY_IMAGE"
 echo ">>> Rhasspy Docker image pulled successfully."
 
-# --- Step 5: Creating Application Menu Entry ---
-print_header "Step 5: Creating Application Menu Entry"
+# --- Step 6: Creating Application Menu Entry ---
+print_header "Step 6: Creating Application Menu Entry"
 echo ">>> Downloading application icon..."
 curl -L "$ICON_URL" -o "$ICON_PATH"
 
@@ -156,7 +177,7 @@ cat > "$DESKTOP_FILE_PATH" << EOL
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Calico
+Name=Calico (^oxo^)~
 Comment=A launcher for the Calico Voice Assistant
 Exec="$PYTHON_VENV_DIR/bin/python3" "$APP_DIR/launcher.py"
 Icon=$ICON_PATH
@@ -173,7 +194,7 @@ echo "What's next?"
 echo "1. IMPORTANT: You must LOG OUT and LOG BACK IN for all permissions and the"
 echo "   new application menu entry to take effect."
 echo ""
-echo "2. After logging back in, you can find 'Calico Voice Assistant' in your"
+echo "2. After logging back in, you can find 'Calico ~(^oxo^)' in your"
 echo "   application menu, or run it from the terminal with:"
 echo "   python3 $APP_DIR/launcher.py"
 echo ""
@@ -184,3 +205,4 @@ echo "4. Your Rhasspy profile files (sentences.ini, etc.) should be placed in:"
 echo "   $CONFIG_DIR/rhasspy/profiles/en/"
 echo ""
 echo "Thank you for installing Calico!"
+
