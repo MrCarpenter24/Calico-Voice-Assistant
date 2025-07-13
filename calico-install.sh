@@ -7,7 +7,15 @@
 # It follows standard Linux directory practices and creates a desktop entry.
 #
 
-set -e # Exit immediately if a command exits with a non-zero status.
+set -euo pipefall
+
+# Function to prompt user to exit program
+function pauseForExit() {
+	local code="${1:-0}"
+	while read -r -t 0.1 -n 1; do :; done
+	read -p "Press Enter to exit..."
+	exit "$code"
+}
 
 # --- Configuration ---
 # Use standard XDG Base Directory Specification paths
@@ -28,7 +36,6 @@ print_header() {
 }
 
 # --- Main Script ---
-# --- THIS IS THE FIX: Use a 'here document' to print the literal text ---
 cat << 'EOL'
   ,-.       _,---._ __  / \
  /  )    .-'       `./ /   \
@@ -206,3 +213,4 @@ echo "   $CONFIG_DIR/rhasspy/profiles/en/"
 echo ""
 echo "Thank you for installing Calico!"
 
+pauseForExit 0
