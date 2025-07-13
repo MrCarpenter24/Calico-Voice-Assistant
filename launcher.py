@@ -17,9 +17,9 @@ from pathlib import Path
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                              QHBoxLayout, QPushButton, QTextEdit, QLabel,
                              QMessageBox, QDialog, QGridLayout, QComboBox,
-                             QLineEdit)
+                             QLineEdit, QFrame, QGroupBox)
 from PyQt6.QtCore import QObject, QThread, pyqtSignal, Qt
-from PyQt6.QtGui import QIcon, QPixmap, QFont
+from PyQt6.QtGui import QIcon
 
 # --- Configuration ---
 APP_DIR = Path.home() / ".local" / "share" / "calico"
@@ -36,14 +36,12 @@ class CalicoLauncher(QMainWindow):
         super().__init__()
         self.setWindowTitle("Calico Launcher")
         self.setGeometry(100, 100, 800, 600)
+        self.is_shutting_down = False
 
-        # --- THIS IS THE FIX: Set Window Icon and Tooltip ---
         if ICON_PATH.exists():
             self.setWindowIcon(QIcon(str(ICON_PATH)))
-        # The tooltip that appears when hovering over the taskbar icon
         self.setToolTip("Calico Voice Assistant")
 
-        # --- Service Manager Setup ---
         self.service_manager = ServiceManager()
         self.service_manager_thread = QThread()
         self.service_manager.moveToThread(self.service_manager_thread)
@@ -146,18 +144,28 @@ class CalicoLauncher(QMainWindow):
             #SettingsButton:hover {
                 background-color: #80cf59;
             }
+            QGroupBox {
+                color: white;
+                font-weight: bold;
+                border: 1px solid white;
+                border-radius: 5px;
+                margin-top: 1ex;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                subcontrol-position: top left;
+                padding: 0 3px;
+            }
         """)
 
     def handle_start_restart(self):
-        # The Restart functionality is handled by stopping then starting
         if self.start_button.text() == "Restart":
             self.log_view.append(">>> Attempting to restart services...")
             self.stop_button.setDisabled(True)
             self.start_button.setDisabled(True)
-            # Chain the start command after stop is confirmed
-            self.service_manager.services_stopped.connect(self.service_manager.start_services)
+            self.service_manager.services_stopped.connect(self.service_manager.start_services, Qt.ConnectionType.SingleShotConnection)
             self.service_manager.stop_services()
-        else: # It's a normal Start
+        else:
             self.log_view.append(">>> Attempting to start services...")
             self.start_button.setDisabled(True)
             self.service_manager.start_services()
@@ -165,11 +173,6 @@ class CalicoLauncher(QMainWindow):
     def handle_stop(self):
         self.log_view.append(">>> Attempting to stop services...")
         self.stop_button.setDisabled(True)
-        # Disconnect the restart chain if it exists
-        try:
-            self.service_manager.services_stopped.disconnect(self.service_manager.start_services)
-        except TypeError:
-            pass # It was not connected, which is fine
         self.service_manager.stop_services()
 
     def update_log_view(self, text):
@@ -177,11 +180,6 @@ class CalicoLauncher(QMainWindow):
         self.log_view.verticalScrollBar().setValue(self.log_view.verticalScrollBar().maximum())
 
     def on_services_started(self):
-        # Disconnect the restart chain if it was used
-        try:
-            self.service_manager.services_stopped.disconnect(self.service_manager.start_services)
-        except TypeError:
-            pass
         self.start_button.setText("Restart")
         self.start_button.setDisabled(False)
         self.stop_button.setDisabled(False)
@@ -198,12 +196,18 @@ class CalicoLauncher(QMainWindow):
         settings_dialog.exec()
         
     def closeEvent(self, event):
+        if self.is_shutting_down:
+            event.accept()
+            return
+
         self.log_view.append(">>> Application closing, stopping all services...")
+        self.is_shutting_down = True
+        self.setEnabled(False)
         self.service_manager.is_monitoring = False
-        self.handle_stop() # Use the same safe stop handler
-        self.service_manager_thread.quit()
-        self.service_manager_thread.wait()
-        event.accept()
+        
+        self.service_manager.services_stopped.connect(self.close)
+        self.service_manager.stop_services()
+        event.ignore()
 
 # --- Service Management (The "Worker") ---
 class ServiceManager(QObject):
@@ -219,14 +223,14 @@ class ServiceManager(QObject):
     def start_services(self):
         try:
             self.log_updated.emit("[INFO] Checking for existing Rhasspy container...")
-            subprocess.run(["sudo", "docker", "rm", "-f", RHASSPY_CONTAINER_NAME], capture_output=True, text=True)
+            subprocess.run(["docker", "rm", "-f", RHASSPY_CONTAINER_NAME], capture_output=True, text=True)
             
             self.log_updated.emit("[INFO] Starting new Rhasspy container...")
             rhasspy_profile_dir = CONFIG_DIR / "rhasspy" / "profiles"
             rhasspy_profile_dir.mkdir(parents=True, exist_ok=True)
             
             docker_command = [
-                "sudo", "docker", "run", "-d", "-p", "12101:12101",
+                "docker", "run", "-d", "-p", "12101:12101",
                 "--name", RHASSPY_CONTAINER_NAME, "--network", "host",
                 "--restart", "unless-stopped",
                 "-v", f"{rhasspy_profile_dir}:/profiles",
@@ -260,8 +264,8 @@ class ServiceManager(QObject):
             self.skill_service_process = None
 
             self.log_updated.emit("[INFO] Stopping and removing Rhasspy container...")
-            subprocess.run(["sudo", "docker", "stop", RHASSPY_CONTAINER_NAME], capture_output=True, text=True)
-            subprocess.run(["sudo", "docker", "rm", RHASSPY_CONTAINER_NAME], capture_output=True, text=True)
+            subprocess.run(["docker", "stop", RHASSPY_CONTAINER_NAME], capture_output=True, text=True)
+            subprocess.run(["docker", "rm", RHASSPY_CONTAINER_NAME], capture_output=True, text=True)
         except Exception as e:
             self.log_updated.emit(f"[ERROR] Error during shutdown: {e}")
         finally:
@@ -318,6 +322,24 @@ class SettingsWindow(QDialog):
         
         main_layout.addLayout(form_layout)
         
+        about_box = QGroupBox("About")
+        about_layout = QVBoxLayout()
+        about_layout.addWidget(QLabel("Calico v0.4.2 pre-alpha"))
+        about_layout.addWidget(QLabel("MIT License"))
+        
+        line = QFrame()
+        line.setFrameShape(QFrame.Shape.HLine)
+        line.setFrameShadow(QFrame.Shadow.Sunken)
+        about_layout.addWidget(line)
+        
+        about_layout.addWidget(self._create_link_label("Weather Data Provided by Open-Meteo.com", "https://open-meteo.com/"))
+        about_layout.addWidget(self._create_link_label("Zip Code Data Provided by Zippopotam.us", "https://zippopotam.us/"))
+        about_layout.addWidget(self._create_link_label("View on GitHub", "https://github.com/MrCarpenter24/Calico-Voice-Assistant/tree/main"))
+        about_layout.addWidget(self._create_link_label("Built to work with Rhasspy 2.5", "https://rhasspy.readthedocs.io/en/latest/"))
+        
+        about_box.setLayout(about_layout)
+        main_layout.addWidget(about_box)
+        
         self.reload_button = QPushButton("Reload Skills (Restart Service)")
         self.reload_button.clicked.connect(self.service_manager.restart_skill_service)
         main_layout.addWidget(self.reload_button)
@@ -327,6 +349,11 @@ class SettingsWindow(QDialog):
         main_layout.addWidget(self.save_button)
         
         self.load_settings()
+
+    def _create_link_label(self, text, url):
+        label = QLabel(f'<a href="{url}" style="color:white;">{text}</a>')
+        label.setOpenExternalLinks(True)
+        return label
 
     def _add_form_row(self, layout, row, label_text, combo_items=None):
         layout.addWidget(QLabel(label_text), row, 0)
@@ -351,11 +378,27 @@ class SettingsWindow(QDialog):
             QMessageBox.critical(self, "Error", f"Could not load config file: {e}")
 
     def save_settings(self):
+        zip_code = self.zip_code_entry.text().strip()
+
+        # If zip code is blank, ask for confirmation
+        if not zip_code:
+            reply = QMessageBox.question(self, 'Confirm Save', 
+                                         "The postal code field is blank. Some skills may not function correctly. Are you sure you want to save?",
+                                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, 
+                                         QMessageBox.StandardButton.No)
+            if reply == QMessageBox.StandardButton.No:
+                return # User cancelled, do not save
+        
+        # If zip code is not blank, validate it
+        elif not self._validate_zip_code_api(zip_code):
+            return # Validation failed, do not save
+
+        # Proceed with saving
         temp_map = {"Fahrenheit": "f", "Celsius": "c"}
         settings = {
             "temp_unit": temp_map.get(self.temp_combo.currentText()),
             "other_units": self.other_units_combo.currentText().lower(),
-            "zip_code": self.zip_code_entry.text(),
+            "zip_code": zip_code,
             "region": self.region_combo.currentText().lower()
         }
         try:
@@ -366,9 +409,26 @@ class SettingsWindow(QDialog):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Could not save settings: {e}")
 
+    def _validate_zip_code_api(self, zip_code):
+        region = self.region_combo.currentText().lower()
+        if not region: # Should not happen with a combo box, but good practice
+            QMessageBox.warning(self, "Input Required", "Please select a region.")
+            return False
+        try:
+            response = requests.get(f"https://api.zippopotam.us/{region}/{zip_code}", timeout=5)
+            if response.status_code == 200: return True
+            QMessageBox.critical(self, "Validation Error", f"Invalid postal code '{zip_code}' for the selected region.")
+            return False
+        except requests.exceptions.RequestException as e:
+            QMessageBox.critical(self, "Connection Error", f"Could not connect to validation service: {e}")
+            return False
+
 # --- Main Execution ---
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    # This ID should match the name of your .desktop file for consistency
+    app.setApplicationName("calico-launcher")
+    
     launcher = CalicoLauncher()
     launcher.show()
     sys.exit(app.exec())
