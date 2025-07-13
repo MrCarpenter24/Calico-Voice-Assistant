@@ -7,7 +7,7 @@
 # It follows standard Linux directory practices and creates a desktop entry.
 #
 
-set -euo pipefall
+set -euo pipefail
 
 # Function to prompt user to exit program
 function pauseForExit() {
