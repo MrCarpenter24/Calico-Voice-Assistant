@@ -184,7 +184,7 @@ cat > "$DESKTOP_FILE_PATH" << EOL
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Calico (^oxo^)~
+Name=Calico
 Comment=A launcher for the Calico Voice Assistant
 Exec="$PYTHON_VENV_DIR/bin/python3" "$APP_DIR/launcher.py"
 Icon=$ICON_PATH
