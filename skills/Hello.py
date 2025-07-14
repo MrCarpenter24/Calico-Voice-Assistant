@@ -31,7 +31,7 @@ class HelloSkill(BaseSkill):
 
         try:
 
-            replies=["Hi!"
+            replies=["Hi!",    # Added missing comma. Adding comment becuase github struggles when only one char is changed.
                     "Hello!",
                     "Hey!",
                     "Hello there!",
