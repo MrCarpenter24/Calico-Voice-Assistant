@@ -75,7 +75,7 @@ class ServiceManager(QObject):
         subprocess.run(["docker", "rm", "-f", RHASSPY_CONTAINER_NAME], capture_output=True, text=True)
 
         self.log_updated.emit("[INFO] Starting new Rhasspy container...")
-        rhasspy_profile_dir = CONFIG_DIR / "rhasspy" / "profiles"
+        rhasspy_profile_dir = CONFIG_DIR / "rhasspy"
         rhasspy_profile_dir.mkdir(parents=True, exist_ok=True)
 
         docker_command = [
@@ -195,10 +195,11 @@ class CalicoLauncher(QMainWindow):
         self.reload_skills_requested.connect(self.service_manager.handle_reload_skills)
 
         self.service_manager_thread.start()
-
-        self._download_assets()
+        
+        # **FIX:** The UI must be initialized *before* any function that tries to use it.
         self.init_ui()
         self.apply_stylesheet()
+        self._download_assets()
         self.on_services_stopped()
 
     def _download_assets(self):
