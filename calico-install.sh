@@ -64,26 +64,10 @@ sudo -v
 
 # --- Step 1: System Dependencies ---
 print_header "Step 1: Installing System Dependencies"
-
-# This sequence is designed to be highly robust against package manager issues.
-# 1. Clean the local cache of downloaded package files.
-echo ">>> Cleaning apt cache..."
-sudo apt-get clean
-
-# 2. Update the package lists to get the latest information.
 echo ">>> Updating package lists..."
 sudo apt-get update
-
-# 3. Force apt to find and correct any existing broken dependencies.
-echo ">>> Attempting to fix any broken dependencies..."
-sudo apt-get -y --fix-broken install
-
-# 4. Now, with a clean and fixed system, install the required packages.
 echo ">>> Installing core system packages..."
-# We use python3-full as a meta-package to ensure all standard
-# library components, including venv, pip, and distutils, are present.
-sudo apt-get install -y git python3-pip python3-full mosquitto mosquitto-clients curl
-sudo apt-get install -y python3-pyqt6
+sudo apt-get install -y git python3-pip python3-full mosquitto mosquitto-clients curl python3-pyqt6
 echo ">>> System dependencies installed successfully."
 
 # --- Step 2: Docker Installation ---
@@ -172,6 +156,21 @@ echo "This may take a few minutes."
 sudo docker pull "$RHASSPY_IMAGE"
 echo ">>> Rhasspy Docker image pulled successfully."
 
+echo ">>> Copying pre-configured Rhasspy profile..."
+RHASSPY_PROFILE_DEST="$CONFIG_DIR/rhasspy"
+RHASSPY_PROFILE_SRC="$APP_DIR/rhasspy-config"
+
+if [ -d "$RHASSPY_PROFILE_SRC" ]; then
+    echo ">>> Creating destination directory at $RHASSPY_PROFILE_DEST"
+    mkdir -p "$RHASSPY_PROFILE_DEST"
+    # The -T option ensures the contents of the source are copied into the destination
+    cp -rT "$RHASSPY_PROFILE_SRC" "$RHASSPY_PROFILE_DEST"
+    echo ">>> Default Rhasspy profile copied successfully."
+else
+    echo "[WARN] Could not find source profile directory at '$RHASSPY_PROFILE_SRC'."
+    echo "[WARN] You will need to configure Rhasspy manually."
+fi
+
 # --- Step 6: Creating Application Menu Entry ---
 print_header "Step 6: Creating Application Menu Entry"
 echo ">>> Downloading application icon..."
@@ -198,19 +197,22 @@ echo ">>> Application menu entry created."
 print_header "Installation Complete!"
 echo ""
 echo "What's next?"
-echo "1. IMPORTANT: You must LOG OUT and LOG BACK IN for all permissions and the"
-echo "   new application menu entry to take effect."
+echo "1. IMPORTANT: You must LOG OUT and LOG BACK IN for all permissions"
+echo "   and the new application menu entry to take effect."
 echo ""
 echo "2. After logging back in, you can find 'Calico' in your"
 echo "   application menu, or run it from the terminal with:"
 echo "   python3 $APP_DIR/launcher.py"
 echo ""
-echo "3. Your personal configuration file is located at:"
-echo "   $CONFIG_DIR/config.json"
+echo "3. A partially pre-configured Rhasspy profile has been copied for you."
+echo "   You can edit your sentences and add custom voice commands at:"
+echo "   $CONFIG_DIR/rhasspy/profiles/en/sentences.ini"
 echo ""
-echo "4. Your Rhasspy profile files (sentences.ini, etc.) need to be manually placed in:"
-echo "   $CONFIG_DIR/rhasspy/profiles/en/"
-echo "   (Do this after starting/stopping for the first time!)"
+echo "4. After the first launch, navigate to http://localhost:12101/"
+echo "   and click to download the recommended (required) files."
+echo "   You can record your own wake word if need be by following"
+echo "   the official Rhasspy 2.5 documentation here:"
+echo "   https://rhasspy.readthedocs.io/en/latest/"
 echo ""
 echo "Thank you for installing Calico!"
 
