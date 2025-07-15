@@ -1,0 +1,45 @@
+{
+    "dialogue": {
+        "system": "rhasspy"
+    },
+    "intent": {
+        "fuzzywuzzy": {
+            "min_confidence": "0.7"
+        },
+        "system": "fsticuffs"
+    },
+    "microphone": {
+        "system": "pyaudio"
+    },
+    "mqtt": {
+        "enabled": "true"
+    },
+    "sounds": {
+        "system": "aplay"
+    },
+    "speech_to_text": {
+        "system": "vosk"
+    },
+    "text_to_speech": {
+        "larynx": {
+            "default_voice": "southern_english_female",
+            "vocoder": "vctk_medium"
+        },
+        "system": "larynx"
+    },
+    "wake": {
+        "pocketsphinx": {
+            "keyphrase": "hey calico"
+        },
+        "raven": {
+            "average_templates": false,
+            "keywords": {
+                "hey calico": {
+                    "enabled": true
+                }
+            },
+            "probability_threshold": "0.5"
+        },
+        "system": "raven"
+    }
+}
