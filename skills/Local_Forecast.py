@@ -112,7 +112,7 @@ class LocalForecastSkill(BaseSkill):
             
             # Speak the forecast and end the session.
             self.speak(forecast_text)
-            self.log.info(f"Successfully spoke forecast requestest for {self.forecast_day}.")
+            self.log.info(f"Successfully spoke forecast request for {self.forecast_day}.")
         except Exception as e:
             self.log.error(f"Error getting forecast: {e}", exc_info=True)
             self.speak("Sorry, I'm having trouble getting the forecast right now.")
