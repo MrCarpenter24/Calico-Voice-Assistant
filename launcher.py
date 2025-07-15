@@ -87,7 +87,7 @@ class ServiceManager(QObject):
 
         self.log_updated.emit("[INFO] Starting new Rhasspy container...")
         
-        rhasspy_profiles_dir = CONFIG_DIR / "rhasspy" / "profiles"
+        rhasspy_profiles_dir = CONFIG_DIR / ".." / "rhasspy" / "profiles"
         rhasspy_profiles_dir.mkdir(parents=True, exist_ok=True)
 
         docker_command = [
