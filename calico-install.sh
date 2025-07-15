@@ -162,9 +162,9 @@ RHASSPY_PROFILE_SRC="$APP_DIR/rhasspy-config"
 
 if [ -d "$RHASSPY_PROFILE_SRC" ]; then
     echo ">>> Creating destination directory at $RHASSPY_PROFILE_DEST"
-    mkdir -p "$RHASSPY_PROFILE_DEST"
+    sudo mkdir -p "$RHASSPY_PROFILE_DEST"
     # The -T option ensures the contents of the source are copied into the destination
-    cp -rT "$RHASSPY_PROFILE_SRC" "$RHASSPY_PROFILE_DEST"
+    sudo cp -rT "$RHASSPY_PROFILE_SRC" "$RHASSPY_PROFILE_DEST"
     echo ">>> Default Rhasspy profile copied successfully."
 else
     echo "[WARN] Could not find source profile directory at '$RHASSPY_PROFILE_SRC'."
