@@ -103,5 +103,5 @@ class LocalTempSkill(BaseSkill):
             self.log.info("Successfully provided local temperature to the user.")
         except Exception as e:
             # Alternative sentence if something goes wrong
-            self.log.info("Faied to provide the user with local temperature. Error: %s", e)
-            self.speak("Sorry, I can't get the temperature right now.")
+            self.log.info("Failed to provide the user with local temperature. Error: %s", e)
+            self.speak("Sorry, I can't get the temperature right now. Try verifying your location in settings or checking your network connection.")
