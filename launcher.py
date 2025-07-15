@@ -71,18 +71,31 @@ class ServiceManager(QObject):
 
     def _start_rhasspy(self):
         """Stops any existing Rhasspy container and starts a new one."""
+        # A specific check for Docker permissions before proceeding.
+        self.log_updated.emit("[INFO] Checking Docker permissions...")
+        perm_check = subprocess.run(["docker", "ps"], capture_output=True, text=True)
+        if perm_check.returncode != 0 and "permission denied" in perm_check.stderr.lower():
+            self.log_updated.emit("[ERROR] Docker permission denied. Please restart to apply new permissions.")
+            self.log_updated.emit("[ERROR] Your user must be in the 'docker' group to manage containers.")
+            return False
+        self.log_updated.emit("[OK] Docker permissions are sufficient.")
+
         self.log_updated.emit("[INFO] Ensuring old Rhasspy container is removed...")
         subprocess.run(["docker", "rm", "-f", RHASSPY_CONTAINER_NAME], capture_output=True, text=True)
 
         self.log_updated.emit("[INFO] Starting new Rhasspy container...")
-        rhasspy_profile_dir = CONFIG_DIR / "rhasspy"
-        rhasspy_profile_dir.mkdir(parents=True, exist_ok=True)
+        
+        # **FIX:** The docker volume mount needs to point to the `profiles` directory
+        # that contains the `en` folder, not its parent.
+        rhasspy_profiles_dir = CONFIG_DIR / "rhasspy"
+        rhasspy_profiles_dir.mkdir(parents=True, exist_ok=True)
 
         docker_command = [
             "docker", "run", "-d", "-p", "12101:12101",
             "--name", RHASSPY_CONTAINER_NAME, "--network", "host",
             "--restart", "unless-stopped",
-            "-v", f"{rhasspy_profile_dir}:/profiles",
+            # Explicitly cast the Path object to a string for the volume mount.
+            "-v", f"{str(rhasspy_profiles_dir)}:/profiles",
             "-v", "/etc/localtime:/etc/localtime:ro",
             "--device", "/dev/snd:/dev/snd",
             "rhasspy/rhasspy:2.5.11", "--user-profiles", "/profiles", "--profile", "en"
@@ -90,7 +103,7 @@ class ServiceManager(QObject):
         result = subprocess.run(docker_command, capture_output=True, text=True)
         if result.returncode != 0:
             self.log_updated.emit(f"[ERROR] Docker failed to start. Is the Docker daemon running?")
-            self.log_updated.emit(f"[ERROR] {result.stderr}")
+            self.log_updated.emit(f"[ERROR] {result.stderr.strip()}")
             return False
         self.log_updated.emit("[OK] Rhasspy container started.")
         return True
@@ -104,7 +117,6 @@ class ServiceManager(QObject):
             return False
 
         # Run the skill service as a detached background process.
-        # We are no longer capturing its output.
         self.skill_service_process = subprocess.Popen(
             [str(python_executable), str(SKILL_SERVICE_SCRIPT)],
             stdout=subprocess.DEVNULL, # Discard stdout
@@ -196,7 +208,6 @@ class CalicoLauncher(QMainWindow):
 
         self.service_manager_thread.start()
         
-        # **FIX:** The UI must be initialized *before* any function that tries to use it.
         self.init_ui()
         self.apply_stylesheet()
         self._download_assets()
