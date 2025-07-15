@@ -87,7 +87,7 @@ class ServiceManager(QObject):
         
         # **FIX:** The docker volume mount needs to point to the `profiles` directory
         # that contains the `en` folder, not its parent.
-        rhasspy_profiles_dir = CONFIG_DIR / "rhasspy"
+        rhasspy_profiles_dir = CONFIG_DIR / ".." / "rhasspy" / "profiles"
         rhasspy_profiles_dir.mkdir(parents=True, exist_ok=True)
 
         docker_command = [
