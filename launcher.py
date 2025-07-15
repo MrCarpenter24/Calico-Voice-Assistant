@@ -69,32 +69,31 @@ class ServiceManager(QObject):
         super().__init__()
         self.skill_service_process = None
 
-    def _start_rhasspy(self):
-        """Stops any existing Rhasspy container and starts a new one."""
-        # A specific check for Docker permissions before proceeding.
+    def _check_docker_permissions(self):
+        """Checks if the user has permissions to run Docker commands."""
         self.log_updated.emit("[INFO] Checking Docker permissions...")
         perm_check = subprocess.run(["docker", "ps"], capture_output=True, text=True)
         if perm_check.returncode != 0 and "permission denied" in perm_check.stderr.lower():
-            self.log_updated.emit("[ERROR] Docker permission denied. Please restart to apply new permissions.")
+            self.log_updated.emit("[ERROR] Docker permission denied. Please RESTART your machine.")
             self.log_updated.emit("[ERROR] Your user must be in the 'docker' group to manage containers.")
             return False
         self.log_updated.emit("[OK] Docker permissions are sufficient.")
+        return True
 
+    def _start_rhasspy(self):
+        """Stops any existing Rhasspy container and starts a new one."""
         self.log_updated.emit("[INFO] Ensuring old Rhasspy container is removed...")
         subprocess.run(["docker", "rm", "-f", RHASSPY_CONTAINER_NAME], capture_output=True, text=True)
 
         self.log_updated.emit("[INFO] Starting new Rhasspy container...")
         
-        # **FIX:** The docker volume mount needs to point to the `profiles` directory
-        # that contains the `en` folder, not its parent.
-        rhasspy_profiles_dir = CONFIG_DIR / ".." / "rhasspy" / "profiles"
+        rhasspy_profiles_dir = CONFIG_DIR / "rhasspy" / "profiles"
         rhasspy_profiles_dir.mkdir(parents=True, exist_ok=True)
 
         docker_command = [
             "docker", "run", "-d", "-p", "12101:12101",
             "--name", RHASSPY_CONTAINER_NAME, "--network", "host",
             "--restart", "unless-stopped",
-            # Explicitly cast the Path object to a string for the volume mount.
             "-v", f"{str(rhasspy_profiles_dir)}:/profiles",
             "-v", "/etc/localtime:/etc/localtime:ro",
             "--device", "/dev/snd:/dev/snd",
@@ -116,11 +115,10 @@ class ServiceManager(QObject):
             self.log_updated.emit(f"[ERROR] Python executable not found at {python_executable}")
             return False
 
-        # Run the skill service as a detached background process.
         self.skill_service_process = subprocess.Popen(
             [str(python_executable), str(SKILL_SERVICE_SCRIPT)],
-            stdout=subprocess.DEVNULL, # Discard stdout
-            stderr=subprocess.DEVNULL  # Discard stderr
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
         )
 
         self.log_updated.emit("[OK] Calico skill service is running.")
@@ -128,6 +126,10 @@ class ServiceManager(QObject):
 
     def handle_start(self):
         """Public slot to start all services."""
+        if not self._check_docker_permissions():
+            self.services_stopped.emit()
+            return
+
         if not self._start_rhasspy():
             self.services_stopped.emit()
             return
@@ -166,12 +168,10 @@ class ServiceManager(QObject):
     def handle_reload_skills(self):
         """Public slot to restart only the skill service."""
         self.log_updated.emit(">>> Restarting skill service to reload skills...")
-        # Stop the existing service
         if self.skill_service_process and self.skill_service_process.poll() is None:
             self.skill_service_process.terminate()
             self.skill_service_process.wait(timeout=5)
         
-        # Start the new one
         if self._start_skill_service():
             self.log_updated.emit(">>> Skill service restarted successfully.")
         else:
@@ -193,6 +193,7 @@ class CalicoLauncher(QMainWindow):
         self.setWindowIcon(QIcon(str(ICON_PATH)))
         self.setGeometry(100, 100, 800, 600)
         self.is_shutting_down = False
+        self.spinner_movie = None # Initialize attribute
 
         self.service_manager = ServiceManager()
         self.service_manager_thread = QThread()
@@ -208,23 +209,25 @@ class CalicoLauncher(QMainWindow):
 
         self.service_manager_thread.start()
         
+        # **FIX:** Download assets *before* initializing the UI that uses them.
+        self._download_assets()
         self.init_ui()
         self.apply_stylesheet()
-        self._download_assets()
         self.on_services_stopped()
 
     def _download_assets(self):
         """Downloads the spinner GIF if it doesn't exist."""
         if not SPINNER_PATH.exists():
-            self.update_log_view("[INFO] Downloading UI assets...")
+            # Can't log to UI yet, so print to console as a fallback.
+            print("[INFO] Downloading UI assets...")
             try:
                 response = requests.get(SPINNER_URL, timeout=10)
                 response.raise_for_status()
                 with open(SPINNER_PATH, 'wb') as f:
                     f.write(response.content)
-                self.update_log_view("[INFO] Assets downloaded.")
+                print("[INFO] Assets downloaded.")
             except Exception as e:
-                self.update_log_view(f"[WARN] Could not download spinner asset: {e}")
+                print(f"[WARN] Could not download spinner asset: {e}")
 
     def init_ui(self):
         """Initializes all UI elements."""
@@ -328,8 +331,11 @@ class CalicoLauncher(QMainWindow):
 
     def update_log_view(self, text):
         """Appends text to the log view and auto-scrolls."""
-        self.log_view.append(text)
-        self.log_view.verticalScrollBar().setValue(self.log_view.verticalScrollBar().maximum())
+        if hasattr(self, 'log_view'):
+            self.log_view.append(text)
+            self.log_view.verticalScrollBar().setValue(self.log_view.verticalScrollBar().maximum())
+        else:
+            print(text)
 
     def on_services_started(self):
         """Slot for when services have successfully started."""
@@ -497,3 +503,4 @@ if __name__ == "__main__":
         pass
     finally:
         pass
+
