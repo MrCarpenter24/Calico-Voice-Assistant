@@ -21,6 +21,9 @@ RETRY_MESSAGES = [
     "I'm having a little trouble understanding. What was that?",
 ]
 
+APP_DIR = Path.home() / ".local" / "share" / "calico"
+CONFIG_DIR = Path.home() / ".config" / "calico"
+
 class BaseSkill(ABC):
     """
     Abstract base class for all Calico skills.
@@ -49,10 +52,10 @@ class BaseSkill(ABC):
         self.retries = 0
 
         # Define path to config file for use in helper function
-        self.config_path = Path.home() / "Documents" / "Calico" / "settings" / "config.json"
+        self.config_path = CONFIG_DIR / "config.json"
 
         # --- Set up dedicated logger for the skill ---
-        log_dir = Path.home() / "Documents" / "Calico" / "logs" / "skills"
+        log_dir = APP_DIR / "logs" / "skills"
         log_dir.mkdir(parents=True, exist_ok=True)
         log_file = log_dir / f"{self.intent_name}.log"
 
