@@ -1,4 +1,4 @@
-# **Calico Voice Assistant Skills**
+# **Calico Voice Assistant Skills [NEEDS REVISED]**
 
 Calico is a modular and extensible skill-based framework designed to work with the powerful open-source [Rhasspy 2.5](https://rhasspy.readthedocs.io/en/latest/) voice assistant. It provides a robust structure for creating complex, conversational skills that can manage their own state, handle multi-turn dialogues, and perform actions on your system.
 
