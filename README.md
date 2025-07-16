@@ -68,8 +68,7 @@ chmod +x calico-install.sh
      * "Hey Calico, how hot/cold is it?"
      * "Hey Calico, open Gmail." *Future plans include adding support for other inbox platforms.*
 
-Remember, Calico is in very early stages of development, so there will be bugs...
-But there's a lot more to come!
+Remember, Calico is in very early stages of development, so there will be bugs... but there's a lot more to come!
 
 ## **Project Structure**
 
