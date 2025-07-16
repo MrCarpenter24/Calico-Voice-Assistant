@@ -17,10 +17,12 @@ The core of Calico is a central service that communicates with Rhasspy's MQTT br
 * **Robust Logging:** The main service and each individual skill have their own dedicated log files with automatic rotation, making debugging a breeze.  
 * **Centralized Configuration:** A shared settings file allows skills to access common configuration values, like location information or preferred units of measurement.  
 * **Extensible Foundation:** A BaseSkill class provides all the boilerplate for MQTT communication and session management, so you can focus on writing the logic for your skill.
+* **[NEW] Installer:** A fancy new way to have all dependencies and project components set up for you!
+* **[NEW] Launcher:** Also fancy, this is the main interface for startin up Calico and editing user settings.
 
 ### **Installation**  
 **WARNING:** It is currently recommended that Calico be installed on a dedicated machine or in an isolated, virual environment.
-* The voice assistant is still in early development and has not been vetted for bugs, security vulnerabilities or compatibility issues in an environment that runs other programs or scripts.
+The voice assistant is still in early development and has not been vetted for bugs, security vulnerabilities or compatibility issues in an environment that runs other programs or scripts.
 
 1. **Download the Install Script**  
    * Start by downloading *calico-install.sh*, located in the repository above.
@@ -41,24 +43,24 @@ chmod +x calico-install.sh
 ./calico-install.sh
 ```
    * Otherwise, or if you simply prefer a graphical approach, you can right click and select an option similar to *execute*, *execute in terminal*, or *run as program*.
-4. **Password Required**
+4. **Password Required**  
    * Before the installer can get things set up for you, it will need your system password to enable *root*.
    * If you don't have one set, simply hit *enter* when the *sudo* prompt appears.
    * Next, the installer will get to work! This should only take a few minutes.
-5. **Restart**
+5. **Restart**  
    * For all of the necessary changes to take effect, you will need to restart and log back in.
-6. **The Launcher**
+6. **The Launcher**  
    * Here is where you'll command Calico. It should be located with the rest of your installed applications.
    * You can *start* and *stop* the application, edit locale and preferrence info in *settings*, or restart Calico's skill service (also located in *settings*).
 7. **First Launch**
    * After hitting *start* for the first time, you'll need top open a browser and navigate to *http://localhost:12101/*.
-   * This is Rhasspy's web interface and where, **with caution**, voice-related settings can be tweaked and edited. See the [docs](https://rhasspy.readthedocs.io/en/latest/).
+   * This is Rhasspy's web interface and where - **with caution** - voice-related settings can be tweaked and edited. See the [docs](https://rhasspy.readthedocs.io/en/latest/).
    * For now, we need to download the required files for Rhasspy (and Calico) to work properly. By acknowledging the banner up top, this should be done for you.
    * Once finished, things should be good to go. You may need to hit *train* or switch the wake word module to *porcupine* (non-functioning on Raspberry Pi OS), or simply make your own wake word with *raven*. Again, see the [docs](https://rhasspy.readthedocs.io/en/latest/).
 8. **We're Done!**
    * Everything *should* be good to go!
    * Remember, Calico is in very early stages of development, so there will be bugs...
-   * But here's a lot more to come!
+   * But there's a lot more to come!
 
 ## **Project Structure**
 
