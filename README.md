@@ -38,11 +38,10 @@ cd /home/[your-username-here]/Downloads
 chmod +x calico-install.sh
 ```
 3. **Run the Installer:**  
-   * If you're already in the terminal, you can type the command below to execute.
+   * If you're already in the terminal, you can type the command below to execute. Otherwise - or if you simply prefer a graphical approach - you can right click and select an option similar to *execute*, *execute in terminal*, or *run as program*.
 ```bash
 ./calico-install.sh
 ```
-   * Otherwise - or if you simply prefer a graphical approach - you can right click and select an option similar to *execute*, *execute in terminal*, or *run as program*.
 4. **Password Required**  
    * Before the installer can get things set up for you, it will need your system password to enable *root*.
    * If you don't have one set, simply hit *enter* when the *sudo* prompt appears.
