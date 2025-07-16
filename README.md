@@ -18,7 +18,7 @@ The core of Calico is a central service that communicates with Rhasspy's MQTT br
 * **Centralized Configuration:** A shared settings file allows skills to access common configuration values, like location information or preferred units of measurement.  
 * **Extensible Foundation:** A BaseSkill class provides all the boilerplate for MQTT communication and session management, so you can focus on writing the logic for your skill.
 * **[NEW] Installer:** A fancy new way to have all dependencies and project components set up for you!
-* **[NEW] Launcher:** Also fancy, this is the main interface for startin up Calico and editing user settings.
+* **[NEW] Launcher:** Also fancy, this is the main interface for starting up Calico and editing user settings.
 
 ### **Installation**  
 **WARNING:** It is currently recommended that Calico be installed on a dedicated machine or in an isolated, virual environment.
