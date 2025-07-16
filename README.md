@@ -47,6 +47,7 @@ chmod +x calico-install.sh
    * Before the installer can get things set up for you, it will need your system password to enable *root*.
    * If you don't have one set, simply hit *enter* when the *sudo* prompt appears.
    * Next, the installer will get to work! This should only take a few minutes.
+   * NOTE: If the install script failed, make sure your system's update settings are set to the default value. On *Ubuntu*, this would be something like "All Updates", as "Security Updates Only" is known to make the script fail.
 5. **Restart**  
    * For all of the necessary changes to take effect, you will need to restart your system and log back in.
 6. **The Launcher**  
@@ -56,7 +57,7 @@ chmod +x calico-install.sh
    * After hitting *start* for the first time, you'll need to open a browser and navigate to *http://localhost:12101/*.
    * This is Rhasspy's web interface and where - **with caution** - voice-related settings can be tweaked and edited. See the [docs](https://rhasspy.readthedocs.io/en/latest/).
    * For now, we need to download the required files for Rhasspy (and Calico) to work properly. By acknowledging the banner up top, this should be done for you.
-   * Once finished, things should be good to go. You may need to hit *train* or switch the wake word module to *porcupine* (non-functioning on Raspberry Pi OS), or simply make your own wake word with *raven* if things don't work. Again, see the [docs](https://rhasspy.readthedocs.io/en/latest/).
+   * Once finished, things should be good to go. You may need to hit *train* or switch the wake word module to *porcupine* (non-functioning on Raspberry Pi OS), or simply make your own wake word with *raven* if things don't work. You may have to change settings under the *audio input* and *audio ouput* modules for audio devices to work properly. Again, see the [docs](https://rhasspy.readthedocs.io/en/latest/).
 8. **We're Done!**
    * Everything *should* be good to go! Trying saying "Hey Calico" to give it your first command!
    * Try any of these:
@@ -65,7 +66,7 @@ chmod +x calico-install.sh
      * "Hey Calico, ask me colors."
      * "Hey Calico, what time is it?"
      * "Hey Calico, how hot/cold is it?"
-     * "Hey Calico, open Gmail." Future plans include adding support for other inbox platofrms.
+     * "Hey Calico, open Gmail." Future plans include adding support for other inbox platforms.
    * Remember, Calico is in very early stages of development, so there will be bugs...
    * But there's a lot more to come!
 
