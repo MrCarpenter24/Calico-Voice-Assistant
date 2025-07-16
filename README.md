@@ -48,7 +48,7 @@ chmod +x calico-install.sh
    * If you don't have one set, simply hit *enter* when the *sudo* prompt appears.
    * Next, the installer will get to work! This should only take a few minutes.
    * NOTE: If the install script failed, make sure your system's update settings are set to the default value. On *Ubuntu*, this would be something like "All Updates", as "Security Updates Only" is known to make the script fail.
-5. **Restart**  
+5. **Next, Restart**  
    * For all of the necessary changes to take effect, you will need to restart your system and log back in.
 6. **The Launcher**  
    * Here is where you'll command Calico. It should be located with the rest of your installed applications.
@@ -67,8 +67,7 @@ chmod +x calico-install.sh
      * "Hey Calico, what time is it?"
      * "Hey Calico, how hot/cold is it?"
      * "Hey Calico, open Gmail." *Future plans include adding support for other inbox platforms.*
-
-Remember, Calico is in very early stages of development, so there will be bugs... but there's a lot more to come!
+   * Remember, Calico is in very early stages of development, so there will be bugs... but there's a lot more to come!
 
 ## **Project Structure**
 
