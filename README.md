@@ -55,7 +55,7 @@ chmod +x calico-install.sh
    * You can *start* and *stop* the application, edit locale and preferrence info in *settings*, or restart Calico's skill service (also located in *settings*).
 7. **First Launch**
    * After hitting *start* for the first time, you'll need to open a browser and navigate to *http://localhost:12101/*.
-   * This is Rhasspy's web interface and where - **with caution** - voice-related settings can be tweaked and edited. See the [docs](https://rhasspy.readthedocs.io/en/latest/).
+   * This is Rhasspy's web interface and where, **with caution**, voice-related settings can be tweaked and edited. See the [docs](https://rhasspy.readthedocs.io/en/latest/).
    * For now, we need to download the required files for Rhasspy (and Calico) to work properly. By acknowledging the banner up top, this should be done for you.
    * Once finished, things should be good to go. You may need to hit *train* or switch the wake word module to *porcupine* (non-functioning on Raspberry Pi OS), or simply make your own wake word with *raven* if things don't work. You may have to change settings under the *audio input* and *audio ouput* modules for audio devices to work properly. Again, see the [docs](https://rhasspy.readthedocs.io/en/latest/).
 8. **We're Done!**
