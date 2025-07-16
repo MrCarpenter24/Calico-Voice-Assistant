@@ -33,7 +33,7 @@ The voice assistant is still in early development and has not been vetted for bu
 ```bash
 cd /home/[your-username-here]/Downloads
 ```
-    * Next we'll use *chmod* to make the file executable, like so:
+   * Next we'll use *chmod* to make the file executable, like so:
 ```bash
 chmod +x calico-install.sh
 ```
