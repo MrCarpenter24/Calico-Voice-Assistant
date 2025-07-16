@@ -28,7 +28,7 @@ The voice assistant is still in early development and has not been vetted for bu
    * Start by downloading *calico-install.sh*, located in the repository above.
 2. **Make the Script Executable**  
    * In some operating systems, such as *Ubuntu*, you can simply right click the downloaded file and edit permissions to make the script executable.
-   * However, other distros, such as *Raspberry Pi OS*, do not have this ability and require the use of the commands instead.
+   * However, other distros, such as *Raspberry Pi OS*, do not have this ability and require the use of commands instead.
    * To do this, open your shell or terminal emulator and navigate to your downloads directory using something like this:
 ```bash
 cd /home/[your-username-here]/Downloads
@@ -42,23 +42,30 @@ chmod +x calico-install.sh
 ```bash
 ./calico-install.sh
 ```
-   * Otherwise, or if you simply prefer a graphical approach, you can right click and select an option similar to *execute*, *execute in terminal*, or *run as program*.
+   * Otherwise - or if you simply prefer a graphical approach - you can right click and select an option similar to *execute*, *execute in terminal*, or *run as program*.
 4. **Password Required**  
    * Before the installer can get things set up for you, it will need your system password to enable *root*.
    * If you don't have one set, simply hit *enter* when the *sudo* prompt appears.
    * Next, the installer will get to work! This should only take a few minutes.
 5. **Restart**  
-   * For all of the necessary changes to take effect, you will need to restart and log back in.
+   * For all of the necessary changes to take effect, you will need to restart your system and log back in.
 6. **The Launcher**  
    * Here is where you'll command Calico. It should be located with the rest of your installed applications.
    * You can *start* and *stop* the application, edit locale and preferrence info in *settings*, or restart Calico's skill service (also located in *settings*).
 7. **First Launch**
-   * After hitting *start* for the first time, you'll need top open a browser and navigate to *http://localhost:12101/*.
+   * After hitting *start* for the first time, you'll need to open a browser and navigate to *http://localhost:12101/*.
    * This is Rhasspy's web interface and where - **with caution** - voice-related settings can be tweaked and edited. See the [docs](https://rhasspy.readthedocs.io/en/latest/).
    * For now, we need to download the required files for Rhasspy (and Calico) to work properly. By acknowledging the banner up top, this should be done for you.
-   * Once finished, things should be good to go. You may need to hit *train* or switch the wake word module to *porcupine* (non-functioning on Raspberry Pi OS), or simply make your own wake word with *raven*. Again, see the [docs](https://rhasspy.readthedocs.io/en/latest/).
+   * Once finished, things should be good to go. You may need to hit *train* or switch the wake word module to *porcupine* (non-functioning on Raspberry Pi OS), or simply make your own wake word with *raven* if things don't work. Again, see the [docs](https://rhasspy.readthedocs.io/en/latest/).
 8. **We're Done!**
-   * Everything *should* be good to go!
+   * Everything *should* be good to go! Trying saying "Hey Calico" to give it your first command!
+   * Try any of these:
+     * Say "Hey" or "Hello there!"
+     * "Hey Calico, what is the weather for tomorrow?"
+     * "Hey Calico, ask me colors."
+     * "Hey Calico, what time is it?"
+     * "Hey Calico, how hot/cold is it?"
+     * "Hey Calico, open Gmail." Future plans include adding support for other inbox platofrms.
    * Remember, Calico is in very early stages of development, so there will be bugs...
    * But there's a lot more to come!
 
