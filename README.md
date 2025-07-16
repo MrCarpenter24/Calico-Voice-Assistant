@@ -19,7 +19,7 @@ The core of Calico is a central service that communicates with Rhasspy's MQTT br
 * **Extensible Foundation:** A BaseSkill class provides all the boilerplate for MQTT communication and session management, so you can focus on writing the logic for your skill.
 
 ### **Installation**  
-####**WARNING:** It is currently recommended that Calico be installed on a dedicated machine or in an isolated, virual environment.
+**WARNING:** It is currently recommended that Calico be installed on a dedicated machine or in an isolated, virual environment.
 * The voice assistant is still in early development and has not been vetted for bugs, security vulnerabilities or compatibility issues in an environment that runs other programs or scripts.
 
 1. **Download the Install Script**  
