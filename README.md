@@ -143,3 +143,4 @@ If a skill isn't working as expected, your first stop should be the log files in
 * This project would not be possible without the amazing work of the [Rhasspy](https://rhasspy.readthedocs.io/en/latest/) community.  
 * Weather data provided by [Open-Meteo](https://open-meteo.com/).  
 * ZIP code lookup via [Zippopotam.us](http://www.zippopotam.us/).
+* Wake word reference files generated with help from [Cloud TTS](https://cloudtts.com/u/index.html).
