@@ -66,7 +66,7 @@ sudo -v
 print_header "Step 1: Installing System Dependencies"
 echo ">>> Updating package lists..."
 sudo apt-get update
-# **FIX:** Install Qt6 development tools and PyQt6 from apt. This is more reliable on Pi.
+# Install Qt6 development tools and PyQt6 from apt. This is more reliable on Pi.
 echo ">>> Installing core system packages (this may take a moment)..."
 sudo apt-get install -y git python3-pip python3-full mosquitto mosquitto-clients curl python3-pyqt6 qt6-base-dev
 echo ">>> System dependencies installed successfully."
@@ -112,7 +112,7 @@ else
     echo ">>> Repository cloned successfully."
 fi
 
-# **FIX:** Create venv with system-site-packages to inherit the system's PyQt6.
+# Create venv with system-site-packages to inherit the system's PyQt6. Done for R Pi.
 echo ">>> Creating a fresh Python virtual environment..."
 rm -rf "$PYTHON_VENV_DIR"
 python3 -m venv --system-site-packages "$PYTHON_VENV_DIR"
@@ -123,7 +123,7 @@ if [ ! -f "$VENV_PIP" ]; then
     exit 1
 fi
 
-# **FIX:** Removed PyQt6 from requirements.txt as it's now handled by apt.
+# Removed PyQt6 from requirements.txt as it's now handled by apt. Done for R Pi.
 echo ">>> Creating requirements.txt..."
 cat > "$APP_DIR/requirements.txt" << EOL
 paho-mqtt
@@ -156,16 +156,17 @@ sudo docker pull "$RHASSPY_IMAGE"
 echo ">>> Rhasspy Docker image pulled successfully."
 
 echo ">>> Copying pre-configured Rhasspy profile..."
-RHASSPY_CONFIG_DEST="$CONFIG_DIR/rhasspy"
-RHASSPY_CONFIG_SRC="$APP_DIR/rhasspy-config"
+RHASSPY_PROFILE_DEST="$CONFIG_DIR/rhasspy"
+RHASSPY_PROFILE_SRC="$APP_DIR/rhasspy-config"
 
-if [ -d "$RHASSPY_CONFIG_SRC" ]; then
-    echo ">>> Creating destination directory at $RHASSPY_CONFIG_DEST"
-    mkdir -p "$RHASSPY_CONFIG_DEST"
-    cp -rT "$RHASSPY_CONFIG_SRC" "$RHASSPY_CONFIG_DEST"
+if [ -d "$RHASSPY_PROFILE_SRC" ]; then
+    echo ">>> Creating destination directory at $RHASSPY_PROFILE_DEST"
+    mkdir -p "$RHASSPY_PROFILE_DEST"
+	# The -T option ensures the contents of the source are copied into the destination
+    cp -rT "$RHASSPY_PROFILE_SRC" "$RHASSPY_PROFILE_DEST"
     echo ">>> Default Rhasspy profile copied successfully."
 else
-    echo "[WARN] Could not find source profile directory at '$RHASSPY_CONFIG_SRC'."
+    echo "[WARN] Could not find source profile directory at '$RHASSPY_PROFILE_SRC'."
     echo "[WARN] You will need to configure Rhasspy manually."
 fi
 
@@ -175,6 +176,7 @@ print_header "Step 6: Creating Application Menu Entry"
 echo ">>> Downloading application icon..."
 curl -L "$ICON_URL" -o "$ICON_PATH"
 
+# Create .desktop file
 DESKTOP_FILE_PATH="$HOME/.local/share/applications/calico-launcher.desktop"
 echo ">>> Creating .desktop file at $DESKTOP_FILE_PATH..."
 cat > "$DESKTOP_FILE_PATH" << EOL
