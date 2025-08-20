@@ -156,7 +156,7 @@ sudo docker pull "$RHASSPY_IMAGE"
 echo ">>> Rhasspy Docker image pulled successfully."
 
 echo ">>> Copying pre-configured Rhasspy profile..."
-RHASSPY_PROFILE_DEST="$CONFIG_DIR/rhasspy"
+RHASSPY_PROFILE_DEST="$CONFIG_DIR/../rhasspy"
 RHASSPY_PROFILE_SRC="$APP_DIR/rhasspy-config"
 
 if [ -d "$RHASSPY_PROFILE_SRC" ]; then
