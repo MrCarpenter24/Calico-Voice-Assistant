@@ -58,14 +58,17 @@ chmod +x calico-install.sh
    * For now, we need to download the required files for Rhasspy (and Calico) to work properly. By acknowledging the banner up top, this should be done for you.
    * Once finished, things should be good to go. You may need to hit *train* or switch the wake word module to *porcupine* (non-functioning on Raspberry Pi OS), or simply make your own wake word with *raven* if things don't work. You may have to change settings under the *audio input* and *audio ouput* modules for audio devices to work properly. Again, see the [docs](https://rhasspy.readthedocs.io/en/latest/).
 8. **We're Done!**
-   * Everything *should* be good to go! Trying saying "Hey Calico" to give it your first command!
+   * Everything *should* be good to go!
+   * Calico has recently switched to using Rhasspy's Mycroft Precise module for wake word detection.
+   * *Hopefully the custom "Hey Calico!" wake word will return soon!*
+   * Trying saying "Hey Mycroft" to give it your first command!
    * Try any of these:
      * Say "Hey" or "Hello there!"
-     * "Hey Calico, what is the weather for tomorrow?"
-     * "Hey Calico, ask me colors."
-     * "Hey Calico, what time is it?"
-     * "Hey Calico, how hot/cold is it?"
-     * "Hey Calico, open Gmail." *Future plans include adding support for other inbox platforms.*
+     * "What is the weather for tomorrow?"
+     * "Ask about my favorite color."
+     * "What time is it?"
+     * "How hot/cold is it?"
+     * "Open Gmail." *Future plans include adding support for other inbox platforms.*
    * Remember, Calico is in very early stages of development, so there will be bugs... but there's a lot more to come!
 
 ## **Project Structure**
@@ -143,4 +146,3 @@ If a skill isn't working as expected, your first stop should be the log files in
 * This project would not be possible without the amazing work of the [Rhasspy](https://rhasspy.readthedocs.io/en/latest/) community.  
 * Weather data provided by [Open-Meteo](https://open-meteo.com/).  
 * ZIP code lookup via [Zippopotam.us](http://www.zippopotam.us/).
-* Wake word reference files generated with help from [Cloud TTS](https://cloudtts.com/u/index.html).
