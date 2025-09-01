@@ -60,7 +60,7 @@ chmod +x calico-install.sh
 8. **We're Done!**
    * Everything *should* be good to go!
    * Calico has recently switched to using Rhasspy's Mycroft Precise module for wake word detection.
-   * *Hopefully the custom "Hey Calico!" wake word will return soon!*
+   * *Hopefully* the custom "Hey Calico!" wake word will return soon!
    * Trying saying "Hey Mycroft" to give it your first command!
    * Try any of these:
      * Say "Hey" or "Hello there!"
