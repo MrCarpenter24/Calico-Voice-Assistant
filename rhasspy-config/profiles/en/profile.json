@@ -28,18 +28,6 @@
         "system": "larynx"
     },
     "wake": {
-        "pocketsphinx": {
-            "keyphrase": "hey calico"
-        },
-        "raven": {
-            "average_templates": false,
-            "keywords": {
-                "hey calico": {
-                    "enabled": true
-                }
-            },
-            "probability_threshold": "0.5"
-        },
-        "system": "raven"
+        "system": "precise"
     }
 }
