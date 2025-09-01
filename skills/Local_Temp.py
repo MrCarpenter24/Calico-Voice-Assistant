@@ -97,9 +97,9 @@ class LocalTempSkill(BaseSkill):
             # Format the output based on the user's preferred unit
             if TEMP_UNIT == 'f':
                 temp_f = temp_c * 9 / 5 + 32
-                self.speak(f"It's currently {temp_f:.1f} degrees Fahrenheit in {place}.")
+                self.speak(f"It's currently {round(temp_f)} degrees Fahrenheit in {place}.")
             else: # Default to Celsius
-                self.speak(f"It's currently {temp_c:.1f} degrees Celsius in {place}.")
+                self.speak(f"It's currently {round(temp_c)} degrees Celsius in {place}.")
             self.log.info("Successfully provided local temperature to the user.")
         except Exception as e:
             # Alternative sentence if something goes wrong
