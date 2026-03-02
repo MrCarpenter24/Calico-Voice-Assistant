@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Simple setttings application for Calico.
+Simple settings application for Calico.
 Uses https://zippopotam.us/ to verify zip codes.
 """
 
